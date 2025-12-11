@@ -30,6 +30,7 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <commands/FindPath.h>
 // #include "commands/AutoAlign.h"
 // #include "commands/AutoLastAlign.h"
 // #include "commands/RotateTo.h"
@@ -153,6 +154,8 @@ RobotContainer::RobotContainer(){
   // Turning is controlled by the X axis of the right stick.
   
 
+
+  //m_grid.SetDefaultCommand(FindPath(&m_grid).ToPtr());
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         // m_drive.Drive(
