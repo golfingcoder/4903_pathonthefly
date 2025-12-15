@@ -58,6 +58,7 @@ class GridSubsystem : public frc2::SubsystemBase {
           return a.x == b.x && a.y == b.y;
       }
   };
+  bool pathfound = false;
 
 //   std::unordered_set<Node> closedSet;
 

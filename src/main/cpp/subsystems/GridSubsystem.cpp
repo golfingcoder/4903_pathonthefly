@@ -66,6 +66,7 @@ void GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
 
     std::priority_queue<Node> openSet;
     std::unordered_set<Node, NodeHash, NodeEqual> closedSet;
+    
 
 
     Node startNode(startX, startY, 0, 0, nullptr);
@@ -74,30 +75,41 @@ void GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
     openSet.push(startNode);
     
     while (!openSet.empty()) {
+        if (pathfound) {
+            return;
+        }
         Node current = openSet.top();
         openSet.pop();
 
-        //std::cout << "Processing Node: (" << current.x << ", " << current.y << ")" << std::endl;
+        std::cout << "Processing Node: (" << current.x << ", " << current.y << ")" << std::endl;
         // std::cout << "Goal Node: (" << goalX << ", " << goalY << ")" << std::endl;
         // Check if we reached the goal
         if (current.x == goalX && current.y == goalY) {
+            pathfound = true;
             // Reconstruct the path
-            std::cout << "Path: ";
-            Node* pathNode = &current;
-            while (pathNode != nullptr) {
+            std::cout << "FOUNDDDDDDDD\n";
+            return;
+            // std::cout << "huh1\n";
+            // std::cout << "Path: ";
+            // Node* pathNode = &current;
+            // while (pathNode != nullptr) {
 
-                std::cout << "(" << pathNode->x << ", " << pathNode->y << ")";
-                field2DGrid[pathNode->y][pathNode->x] = 2; // Mark the path on the grid
-                pathNode = pathNode->parent;
+            //     std::cout << "(" << pathNode->x << ", " << pathNode->y << ")";
+            //     field2DGrid[pathNode->y][pathNode->x] = 2; // Mark the path on the grid
+            //     pathNode = pathNode->parent;
 
-                if (pathNode != nullptr) {
-                    std::cout << " -> ";
-                }
-            }
+            //     if (pathNode != nullptr) {
+            //         std::cout << " -> ";
+            //     }
+            // }
 
             std::cout << std::endl;
-            return;
+            
+            // return;
+            // break;
         }
+        // std::cout << "huh2\n";
+        
 
         // Add the current node to the closed set
         closedSet.insert(current);

@@ -15,7 +15,7 @@ void FindPath::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void FindPath::Execute() {
-  m_gridSubsystem->findPath(1, 1, 13, 13);
+  // m_gridSubsystem->findPath(1, 1, 13, 13);
 }
 
 // Called once the command ends or is interrupted.
