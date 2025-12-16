@@ -1,70 +1,54 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/shuffleboard/Shuffleboard.h>
-#include <set>
+#include <vector>
 #include <queue>
-#include <unordered_set>
-
+#include <unordered_map>
+#include <cmath>
+#include <iostream>
 
 class GridSubsystem : public frc2::SubsystemBase {
  public:
   GridSubsystem();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
   void Periodic() override;
+
   void readFromFile();
   void printGrid();
-  void findPath(int startX, int startY, int goalX, int goalY);
+
+  // Call this ONCE when you want a path
+  bool findPath(int startX, int startY, int goalX, int goalY);
+
+  // Access the final path
+  const std::vector<std::pair<int, int>>& getPath() const;
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+  static constexpr int kWidth  = 14;
+  static constexpr int kHeight = 14;
 
-  int field2DGrid[14][14];
-  frc::ShuffleboardTab& tab = frc::Shuffleboard::GetTab("ARRAYY");
-  std::ostringstream content;
+  int field2DGrid[kHeight][kWidth] = {0};
+
   struct Node {
     int x, y;
     double g;
     double h;
     double f;
-    Node* parent;
 
-    Node(int x, int y, double g = 0, double h = 0, Node* parent = nullptr)
-        : x(x), y(y), g(g), h(h), f(g + h), parent(parent) {}
+    Node(int x, int y, double g, double h)
+        : x(x), y(y), g(g), h(h), f(g + h) {}
+  };
 
-    bool operator<(const Node& other) const {
-        return f > other.f; 
+  struct NodeCompare {
+    bool operator()(const Node& a, const Node& b) const {
+      return a.f > b.f;  // min-heap by f
     }
-
-  };
-//   std::priority_queue<Node> openSet;
-
-  struct NodeHash {
-      size_t operator()(const Node& node) const {
-          return std::hash<int>()(node.x) ^ (std::hash<int>()(node.y) << 1);
-      }
   };
 
-  struct NodeEqual {
-      bool operator()(const Node& a, const Node& b) const {
-          return a.x == b.x && a.y == b.y;
-      }
-  };
-  bool pathfound = false;
+  // Stores final reconstructed path
+  std::vector<std::pair<int, int>> m_path;
 
-//   std::unordered_set<Node> closedSet;
+  bool m_pathFound = false;
 
-
-  
-  
-  
-  
+  double heuristic(int x1, int y1, int x2, int y2) const;
+  bool inBounds(int x, int y) const;
 };
