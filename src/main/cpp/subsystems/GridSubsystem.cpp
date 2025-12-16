@@ -84,29 +84,33 @@ void GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
         std::cout << "Processing Node: (" << current.x << ", " << current.y << ")" << std::endl;
         // std::cout << "Goal Node: (" << goalX << ", " << goalY << ")" << std::endl;
         // Check if we reached the goal
-        if (current.x == goalX && current.y == goalY) {
+       if (current.x == goalX && current.y == goalY) {
             pathfound = true;
+            std::cout << "Path found! Reconstructing the path..." << std::endl;
+
             // Reconstruct the path
-            std::cout << "FOUNDDDDDDDD\n";
-            return;
-            // std::cout << "huh1\n";
-            // std::cout << "Path: ";
-            // Node* pathNode = &current;
-            // while (pathNode != nullptr) {
+            std::vector<std::pair<int, int>> path; // To store the path
+            Node* pathNode = &current;
 
-            //     std::cout << "(" << pathNode->x << ", " << pathNode->y << ")";
-            //     field2DGrid[pathNode->y][pathNode->x] = 2; // Mark the path on the grid
-            //     pathNode = pathNode->parent;
+            // Traverse the parent pointers to reconstruct the path
+            while (pathNode != nullptr) {
+                path.push_back({pathNode->x, pathNode->y}); // Store the current node's coordinates
+                pathNode = pathNode->parent; // Move to the parent node
+            }
 
-            //     if (pathNode != nullptr) {
-            //         std::cout << " -> ";
-            //     }
-            // }
-
+            // Print the path in reverse order (from start to goal)
+            std::cout << "Path: ";
+            for (auto it = path.rbegin(); it != path.rend(); ++it) {
+                std::cout << "(" << it->first << ", " << it->second << ")";
+                if (it + 1 != path.rend()) { // Add " -> " if not the last node
+                    std::cout << " -> ";
+                }
+            }
             std::cout << std::endl;
-            
-            // return;
-            // break;
+
+            return;
+                
+
         }
         // std::cout << "huh2\n";
         

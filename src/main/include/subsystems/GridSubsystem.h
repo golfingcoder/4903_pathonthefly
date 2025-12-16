@@ -60,11 +60,9 @@ class GridSubsystem : public frc2::SubsystemBase {
   };
   bool pathfound = false;
 
-//   std::unordered_set<Node> closedSet;
+    std::vector<std::pair<int, int>> path; // To store the path in reverse order
+    std::set<Node*> visitedNodes; // To track visited nodes
 
 
-  
-  
-  
-  
+//   std::unordered_set<Node> closedSet
 };
