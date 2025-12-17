@@ -64,15 +64,20 @@ bool GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
     m_path.clear();
     m_pathFound = false;
 
-    if (field2DGrid[goalY][goalX] != 0) {
-        std::cout << "Goal node is blocked!\n";
+    std::cout << field2DGrid[12][12] << std::endl;
+
+    // Ensure the goal node is walkable
+    if (field2DGrid[goalX][goalY] != 0) {
+        // std::cout << "Goal node is blocked!\n";
+        
         return false;
     }
 
     std::priority_queue<Node, std::vector<Node>, NodeCompare> openSet;
 
     bool closed[kHeight][kWidth] = {false};
-    double gScore[kHeight][kWidth] = {1e9};
+    double gScore[kHeight][kWidth];
+    std::fill(&gScore[0][0], &gScore[0][0] + kHeight * kWidth, 1e9);
     std::pair<int, int> parent[kHeight][kWidth];
 
     gScore[startY][startX] = 0;
@@ -92,8 +97,6 @@ bool GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
         if (closed[current.y][current.x]) continue;
         closed[current.y][current.x] = true;
 
-        std::cout << "Processing (" << current.x << ", " << current.y << ")\n";
-
         // Goal reached
         if (current.x == goalX && current.y == goalY) {
             int cx = goalX;
@@ -101,7 +104,7 @@ bool GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
 
             while (!(cx == startX && cy == startY)) {
                 m_path.emplace_back(cx, cy);
-                auto p = parent[cx][cy];
+                auto p = parent[cy][cx];
                 cx = p.first;
                 cy = p.second;
             }
@@ -126,23 +129,13 @@ bool GridSubsystem::findPath(int startX, int startY, int goalX, int goalY) {
             int nx = current.x + dx[i];
             int ny = current.y + dy[i];
 
-            if (!inBounds(nx, ny)) {
-                std::cout << "Neighbor (" << nx << ", " << ny << ") is out of bounds.\n";
-                continue;
-            }
-            if (field2DGrid[ny][nx] != 0) {
-                std::cout << "Neighbor (" << nx << ", " << ny << ") is blocked.\n";
-                continue;
-            }
-            if (closed[ny][nx]) {
-                std::cout << "Neighbor (" << nx << ", " << ny << ") is already closed.\n";
-                continue;
-            }
+            if (!inBounds(nx, ny)) continue;
+            if (field2DGrid[ny][nx] != 0) continue;
+            if (closed[ny][nx]) continue;
 
             double tentativeG = gScore[current.y][current.x] + 1.0;
 
             if (tentativeG < gScore[ny][nx]) {
-                std::cout << "Updating neighbor (" << nx << ", " << ny << ") with new gScore.\n";
                 parent[ny][nx] = {current.x, current.y};
                 gScore[ny][nx] = tentativeG;
 

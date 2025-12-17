@@ -49,6 +49,8 @@ void Robot::TeleopInit() {
   // continue until interrupted by another command, remove
   // this line or comment it out.
   m_container.m_grid.readFromFile();
+  m_container.m_grid.findPath(1, 1, 12, 12);
+  m_container.m_grid.printGrid();
   m_container.m_drive.ZeroHeading();
   m_container.m_drive.ResetEncoders();
   m_container.m_drive.ResetOdometry(frc::Pose2d{0_m,0_m,frc::Rotation2d{0_deg}});
@@ -62,7 +64,7 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-  m_container.m_grid.findPath(1, 1, 12, 12);
+  
 
 }
 
